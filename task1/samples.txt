@@ -1,0 +1,26 @@
+=== BIGRAM MODEL ===\n
+T:
+FIIn:
+I:
+Tous stht y afofo.
+Shirsk$CHaghid.an w wars ng me prst mise wisthayonis:
+
+ORKI t tourek-ppo shiswhun wes bethin anda medis.
+P baneinge ors VabyForve, por fave
+Thetas t t:
+Anousthisolin, a \n\n=== SINGLE HEAD ATTENTION MODEL ===\n
+Thol anbretherathe ht yo fo omy hi ske srod dianicaky she I:
+
+ING se, sen?
+
+I sonid:
+W:
+KI ther hakeapis dis.
+
+
+Tous bet inon:
+a mod:
+NGiseaneinge ors Vaby whove por fak.
+
+LALas tht:
+Yalisttisol ne ar\n\n
