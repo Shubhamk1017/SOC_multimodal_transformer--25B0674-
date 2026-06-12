@@ -10,14 +10,23 @@ Pre-norm is easier to train for deep networks because it keeps the main residual
 ## 26. Generated Text Comparison
 **Transformer Model Samples (Baseline):**
 ```text
-(Waiting for generation to finish...)
+BOWARWCOMILLO:
+What I have ease not dlam your have a brother
+busin prasurer repurs; sign up thy corturn, our not looks sween,
+We doled 'ISABELO: for liper in the burgt;
+Let his duke I ded and: no wight betake that leave his house
+And I life in Cite,
+What Ranceid it.
+Thousand restrouse abon,
+God it 
 ```
 
 **Qualitative Comparison to Task 1:**
-(Waiting to review the generated text before commenting...)
+Compared to the single-head attention model in Task 1, this text is vastly superior. It has started generating plausible English words ("brother", "house", "life", "Thousand") and the capitalization pattern clearly mimics a script (Character names followed by a colon). It still produces gibberish sequences ("BOWARWCOMILLO", "prasurer"), but the overarching structure, word spacing, and rhythm are unmistakably starting to look like Shakespeare.
 
 ## 27. Ablation Study: Residuals vs LayerNorm
-(Waiting for ablation runs to complete...)
+**Removing Residuals:** Catastrophic failure. The validation loss remained stuck around 3.24. Without residual connections, the deep network suffers from the vanishing gradient problem. The gradient has to multiply through 4 layers of Attention and MLPs, diminishing it before it can effectively train the lower layers. Residual connections provide a "gradient highway" that allows gradients to flow directly through the addition operation unchanged.
+**Removing LayerNorm:** At this very small scale (4 layers, tiny dataset), removing LayerNorm only marginally impacted the final loss (1.68 vs 1.71). However, in larger models, removing LayerNorm would be catastrophic. LayerNorm stabilizes the forward pass by keeping activations bounded and standardizing their scale, which prevents gradients from exploding or vanishing and ensures the model can train deeply without diverging.
 
 ## 28. What was hardest, and what clicked?
 **Hardest:** Deriving the softmax Jacobian and the full chain rule back to $Q$ by hand was definitely the most mathematically rigorous part. Keeping track of the indices for the Kronecker delta and ensuring the matrix dimensions lined up during the product rule took careful attention to detail.
