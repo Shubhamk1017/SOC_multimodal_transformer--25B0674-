@@ -1,4 +1,4 @@
-# Task 2: Math Derivations for Attention Gradients
+# Task 2: Math Derivations — Attention Gradients
 
 Let $Q, K, V$ be the query, key, and value matrices.
 Let $S = \frac{QK^T}{\sqrt{d_k}}$ be the unscaled-then-scaled scores matrix of shape $(T, T)$.
@@ -6,7 +6,7 @@ Let $P = \text{softmax}(S)$ be the row-wise softmax of $S$, shape $(T, T)$.
 Let $A = PV$ be the output of the attention head, shape $(T, d_v)$.
 
 ## 1. Warmup: Derive $\partial A/\partial V$
-The attention output is a matrix multiplication $A = PV$.
+Since $A = PV$ is just a matrix multiplication, this one is pretty straightforward.
 For individual elements, $A_{ij} = \sum_{k} P_{ik} V_{kj}$.
 Taking the derivative with respect to an element $V_{xy}$:
 $$ \frac{\partial A_{ij}}{\partial V_{xy}} = P_{ix} \delta_{jy} $$
@@ -15,8 +15,8 @@ In matrix calculus notation, the gradient of a scalar loss $L$ with respect to $
 $$ \frac{\partial L}{\partial V} = P^T \frac{\partial L}{\partial A} $$
 
 ## 2. Softmax Jacobian
-Let $p = \text{softmax}(s)$ be a vector-valued function. The $i$-th element is $p_i = \frac{e^{s_i}}{\sum_k e^{s_k}}$.
-We want to find the Jacobian matrix entries $\frac{\partial p_i}{\partial s_j}$.
+This part took me a while. Let $p = \text{softmax}(s)$, so $p_i = \frac{e^{s_i}}{\sum_k e^{s_k}}$.
+We need the Jacobian entries $\frac{\partial p_i}{\partial s_j}$, which splits into two cases:
 By the quotient rule:
 **Case 1: $i = j$**
 $$ \frac{\partial p_i}{\partial s_i} = \frac{e^{s_i} \left( \sum_k e^{s_k} \right) - e^{s_i} \cdot e^{s_i}}{\left( \sum_k e^{s_k} \right)^2} = \frac{e^{s_i}}{\sum_k e^{s_k}} - \left( \frac{e^{s_i}}{\sum_k e^{s_k}} \right)^2 = p_i - p_i^2 = p_i(1 - p_i) $$
@@ -49,8 +49,8 @@ Finally, we substitute $dS$ back into our first equation:
 $$ \frac{\partial L}{\partial Q} = \frac{1}{\sqrt{d_k}} dS \cdot K $$
 
 ## 4. Interpretation
-**Why does the gradient through softmax become very small when the input logits have large magnitudes?**
-When the input logits ($s_i$) have large magnitudes, the softmax function saturates. This means that the largest logit will completely dominate the exponentiation, driving its corresponding probability $p_i \to 1$, while all other probabilities $p_j \to 0$.
+**Why does the gradient vanish when logits are large?**
+When the inputs to softmax are large in magnitude, one probability gets pushed to ~1 and the rest to ~0 (softmax saturates).
 Looking at the Jacobian formula we derived: $\frac{\partial p_i}{\partial s_j} = p_i(\delta_{ij} - p_j)$.
-If $p_i$ is very close to $1$ or $0$, then $p_i(1 - p_i) \approx 0$ and $-p_i p_j \approx 0$. In other words, all entries of the Jacobian matrix approach zero. Consequently, $dS \approx 0$, and no gradient flows back to $Q$ or $K$. 
-Dividing the dot products $QK^T$ by $\sqrt{d_k}$ explicitly prevents the logits from growing too large as the embedding dimension $d_k$ scales, ensuring the probabilities stay away from the saturated regions and gradients can flow cleanly.
+When $p_i \approx 1$ or $0$, then $p_i(1 - p_i) \approx 0$ and $-p_i p_j \approx 0$ — the entire Jacobian goes to zero. So $dS \approx 0$ and gradients stop flowing to $Q$ and $K$.
+This is exactly why we divide $QK^T$ by $\sqrt{d_k}$ — it keeps the logits from blowing up as $d_k$ grows, so softmax stays in a range where gradients are actually useful. Makes the sqrt(d_k) scaling feel a lot less arbitrary once you see it from the gradient perspective.
