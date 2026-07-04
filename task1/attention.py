@@ -169,7 +169,7 @@ if __name__ == '__main__':
     generated_text = decode(generated_indices)
     
     with open('task1/samples.txt', 'a', encoding='utf-8') as f:
-        f.write("=== SINGLE HEAD ATTENTION MODEL ===\n")
+        f.write("single head attention output:\n")
         f.write(generated_text)
         f.write("\n\n")
     

@@ -1,4 +1,5 @@
-=== BIGRAM MODEL ===
+bigram output:
+
 T:
 FIIn:
 I:
@@ -10,7 +11,8 @@ P baneinge ors VabyForve, por fave
 Thetas t t:
 Anousthisolin, a 
 
-=== SINGLE HEAD ATTENTION MODEL ===
+single head attention output:
+
 Thol anbretherathe ht yo fo omy hi ske srod dianicaky she I:
 
 ING se, sen?

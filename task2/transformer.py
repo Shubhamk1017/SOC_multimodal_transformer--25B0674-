@@ -265,7 +265,7 @@ if __name__ == '__main__':
     
     os.makedirs('task2', exist_ok=True)
     with open('task2/samples.txt', 'w', encoding='utf-8') as f:
-        f.write("=== TRANSFORMER MODEL (BASELINE) ===\n")
+        f.write("transformer baseline output:\n")
         f.write(generated_text)
         f.write("\n\n")
     

@@ -123,7 +123,7 @@ if __name__ == '__main__':
     generated_text = decode(generated_indices)
     
     with open('task1/samples.txt', 'w', encoding='utf-8') as f:
-        f.write("=== BIGRAM MODEL ===\n")
+        f.write("bigram output:\n")
         f.write(generated_text)
         f.write("\n\n")
     

@@ -18,13 +18,12 @@ The transformer output looks like this:
 ```text
 BOWARWCOMILLO:
 What I have ease not dlam your have a brother
-busin prasurer repurs; sign up thy corturn, our not looks sween,
-We doled 'ISABELO: for liper in the burgt;
-Let his duke I ded and: no wight betake that leave his house
-And I life in Cite,
+busin prasurer the with it musdry our tracerve,
+And looks sween an ag; raif to know friend-make,
+Is of hither friends you, Edie;
+Thrus with in take that leave his house me greaths in Cite,
 What Ranceid it.
-Thousand restrouse abon,
-God it
+Thousand rest out saburn's delay
 ```
 
 This is way better than the bigram model from task1. The bigram output was just random character soup, but here it actually looks like Shakespeare dialogues with character names and proper line breaks. It still doesnt make much sense logically, but it's a huge step up.
