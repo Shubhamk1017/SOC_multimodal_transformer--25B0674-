@@ -2,20 +2,20 @@
 
 ## 1. What problem were the authors solving?
 
-The standard approach before Transformers was using RNNs/LSTMs for sequence tasks like translation. The problem is these models process tokens one by one — you can't parallelise that, and they tend to lose track of things from early in the sequence (vanishing gradient issue). The Transformer ditches recurrence completely and uses attention to let every position look at every other position at once. This makes training much faster since you can actually use your GPU properly.
+So basically before this paper, everyone was using RNNs or LSTMs for seq2seq tasks like translation. But the major issue with those is that they process words one by one. You cant really parallelise that, and they struggle with long sentences because they tend to forget stuff from the start (vanishing gradient problem). The authors solved this by introducing the Transformer, which completely gets rid of recurrence. It uses self attention so everything can look at everything else in parallel. This makes training way faster and you can actually use the GPUs fully.
 
-I think the key insight was realising that the sequential processing wasn't actually necessary — you could get the same (or better) contextual understanding through attention alone.
+i think the main insight was realising that you dont even need recurrence to get context, attention alone does a better job.
 
 ## 2. What is self-attention computing?
 
-For each token, you compute three things: a Query vector (roughly "what am I looking for"), a Key vector ("what do I contain"), and a Value vector ("what information do I carry"). You take dot products between one token's Query and all other tokens' Keys to get relevance scores, normalise with softmax, and use those as weights to combine the Values.
+For every word, you calculate three vectors: Query (what the word is looking for), Key (what the word has), and Value (the actual content). To see how much one word should focus on another, you take the dot product of the Query and Key. This gives a similarity score, which you normalise using softmax. Finally, you multiply these weights with the Value vectors to get the output.
 
-The scaling by 1/sqrt(d_k) is important — without it the dot products grow too large and softmax saturates (I saw this happen when I removed the scaling in my code, the attention weights became basically one-hot).
+The scaling factor 1/sqrt(d_k) is really important here. without it, dot products grow too big and softmax saturates (the gradients become zero and training stops). i actually tried running it without this scaling in task1 and the attention weights just became one-hot vectors, so it definitely matters.
 
 ## 3. What does the decoder change?
 
-Two main things:
-- A causal mask so position i can only attend to positions ≤ i (otherwise the model would "cheat" by looking at future tokens during training)
-- A cross-attention layer where the decoder queries attend to the encoder's keys and values — this is how the output stays grounded in the input
+The decoder has a couple of changes:
+- Causal masking: this ensures that when predicting the next word, the model can only look at past words. otherwise it would just cheat by looking ahead.
+- Cross-attention: here, the decoder Queries attend to the encoder Keys and Values so the output actually translates the input sentence.
 
-The masking has to happen before softmax (set future entries to -inf), not after. If you zero things out after softmax, the probabilities don't sum to 1 anymore and you get weird gradient issues. I got confused about this initially and my mentor had to explain it.
+Also, the masking has to be done before softmax (by setting future scores to -inf). If you try to do it after softmax by just setting future values to zero, the weights dont sum to 1 and you leak future info. i got stuck on this for a bit untill my mentor explained why doing it after softmax is wrong.

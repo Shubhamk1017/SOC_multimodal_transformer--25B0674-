@@ -2,18 +2,18 @@
 
 ## 12. Why divide by sqrt(d_k)?
 
-The dot product between Q and K vectors has variance proportional to d_k. So if d_k = 64, the raw scores can get pretty large in magnitude. When you feed large numbers into softmax, it basically becomes a hard argmax — one element gets ~1.0 and everything else gets ~0.0. Gradients in that regime are basically zero, so the model stops learning.
+When you take the dot product of Q and K vectors, the variance grows with the dimension d_k. So if d_k is large (like 64 or 128), the scores can get really huge. When you pass these large numbers to softmax, it acts like a hard max — one value gets a probability of almost 1.0 and everything else becomes 0. The gradients for softmax in this region are basically zero, which means the model stops learning (vanishing gradients).
 
-Dividing by sqrt(d_k) scales the variance back to ~1, keeping softmax in the "useful" range where it actually produces meaningful gradients. I checked this by printing attention weights with and without scaling — without it they looked almost binary after a few hundred steps.
+Dividing by sqrt(d_k) scales the variance back down to 1. This keeps the softmax inputs in a normal range where gradients can actually flow. i verified this by printing the attention weights during training — without scaling, they just became binary one-hot vectors after a few steps.
 
 ## 13. Causal mask: before or after softmax?
 
-Has to be before. If you apply it after (just zeroing out entries), the remaining weights don't add up to 1 because softmax already distributed probability to those future tokens. Even renormalising doesn't fix it because the future token logits already affected the denominator.
+It definitely has to be before softmax. If you apply it after (like just setting future values to 0), the weights won't sum to 1 anymore because softmax already distributed probability to the future tokens. Even if you try to normalise them again, you've already let the future tokens affect the denominator of the softmax, which leaks info.
 
-Setting them to -inf before softmax works cleanly: exp(-inf) = 0, so future tokens contribute zero to both numerator and denominator. The distribution sums to 1 over only the valid (past) positions.
+By setting future positions to -inf before softmax, exp(-inf) becomes exactly 0. This means future tokens contribute nothing to the numerator or denominator. Softmax then calculates a proper probability distribution that sums to 1 over only the past tokens.
 
 ## 14. Q, K, V — what are they?
 
-My way of thinking about it: you're searching your notes before a viva. Your question ("how does backprop work?") is the Query. Each page of your notes has a heading — those are the Keys. The actual content on each page is the Value. You match your question against each heading, figure out which pages are most relevant, then read the content from those pages weighted by relevance.
+i think of it like searching through my lecture notes. My query (Q) is the specific topic i want to find, like "gradient descent formula". The headings of different pages are the Keys (K). The actual text on those pages is the Value (V). i match my query against all the keys to see which page is relevant, and then i read the values (the text) from the most relevant pages.
 
-In the model, Q/K/V are linear projections of the input embeddings. Each head learns different projection matrices, so different heads can focus on different kinds of relationships (one might track position, another might track meaning).
+In the code, Q, K, and V are just linear projections of the input embeddings. Since we have multiple heads, each head learns different weights so they can focus on different types of relationships (like some heads looking at grammar and others at meaning).

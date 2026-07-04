@@ -2,19 +2,19 @@
 
 ## 24. What does the MLP do in each block?
 
-Attention handles the "communication" part — it lets tokens share information with each other by computing weighted sums. But a weighted sum is still a linear operation. The MLP comes after attention and applies non-linear transformations (ReLU) to the aggregated features at each position independently. So attention decides what information to gather, and the MLP decides what to do with it.
+Attention is mostly about communication — it lets different tokens talk to each other and mix their information. But attention by itself is just a weighted sum, which is a linear operation. The MLP (Feed Forward network) comes after attention and applies non-linear stuff (like ReLU activation) to the features at each position independently. So attention gathers the information, and the MLP processes it.
 
-I like to think of it as: attention is "listening to everyone", MLP is "thinking about what you heard".
+i like to think of it as attention is "listening to other words" and MLP is "thinking about what it heard".
 
 ## 25. Pre-norm vs post-norm
 
-I used pre-norm (LayerNorm before the sublayer, not after). The idea is that with pre-norm, the residual path stays completely clean — gradients can flow all the way from the loss back to the first layer without passing through any normalisation. With post-norm the gradient has to go through a LayerNorm at every block, which can cause issues in deep networks.
+i went with pre-norm, meaning LayerNorm is applied before the self-attention and MLP layers, not after. Pre-norm is much better for training deep models because it keeps the residual path clean. Gradients can flow directly from the end of the network back to the beginning without getting messed up by normalisation layers. With post-norm, the gradients have to pass through LayerNorm at every block, which can make training unstable.
 
-From what I've read, the original "Attention Is All You Need" paper used post-norm, but most modern implementations (like GPT-2, nanoGPT) switched to pre-norm because it's more stable to train.
+Apparently the original paper used post-norm, but almost every modern model (like GPT/nanoGPT) uses pre-norm now because it just trains much easier.
 
 ## 26. Generated text comparison
 
-**Transformer samples:**
+The transformer output looks like this:
 ```text
 BOWARWCOMILLO:
 What I have ease not dlam your have a brother
@@ -27,4 +27,4 @@ Thousand restrouse abon,
 God it
 ```
 
-Compared to the bigram model from Task 1, this is a clear improvement — the text has some semblance of sentence structure and even character names that look Shakespeare-ish. The bigram output was basically random character soup. Still not great by any means, but you can see the model is picking up on patterns like dialogue formatting and line breaks.
+This is way better than the bigram model from task1. The bigram output was just random character soup, but here it actually looks like Shakespeare dialogues with character names and proper line breaks. It still doesnt make much sense logically, but it's a huge step up.

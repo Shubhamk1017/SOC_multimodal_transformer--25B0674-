@@ -265,9 +265,9 @@ if __name__ == '__main__':
     
     os.makedirs('task2', exist_ok=True)
     with open('task2/samples.txt', 'w', encoding='utf-8') as f:
-        f.write("=== TRANSFORMER MODEL (BASELINE) ===\\n")
+        f.write("=== TRANSFORMER MODEL (BASELINE) ===\n")
         f.write(generated_text)
-        f.write("\\n\\n")
+        f.write("\n\n")
     
     print("Running No Residuals Ablation...")
     _, history_no_res = run_experiment("No Residuals")
