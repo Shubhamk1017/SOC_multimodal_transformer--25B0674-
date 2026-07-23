@@ -1,0 +1,61 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Task 5 InfoNCE Sanity Tests",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/task5/test_loss.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Run Task 5 Toy Alignment",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/task5/toy_alignment.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Run Task 5 Semantic Search Demo",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/task5/semantic_search.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Train Task 6 Flickr8k Model",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/task6/train.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Evaluate Task 6 Retrieval (Recall@K)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/task6/eval.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Run Task 6 Text-to-Image Search CLI",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/task6/text_to_image_search.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Run Task 6 Zero-Shot Classification",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/task6/zero_shot.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    }
+  ]
+}

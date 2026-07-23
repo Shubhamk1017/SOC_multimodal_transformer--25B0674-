@@ -1,0 +1,17 @@
+{
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}",
+    "${workspaceFolder}/task5",
+    "${workspaceFolder}/task6"
+  ],
+  "python.autoComplete.extraPaths": [
+    "${workspaceFolder}",
+    "${workspaceFolder}/task5",
+    "${workspaceFolder}/task6"
+  ],
+  "editor.formatOnSave": true,
+  "files.associations": {
+    "*.md": "markdown",
+    "*.py": "python"
+  }
+}
